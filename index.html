@@ -225,10 +225,10 @@
                 const defeatedCollection = ref([]);
 
                 const timeZones = ref([
-                    { name: 'あさ', start: '06:00', end: '07:30', icon: '☀️', textColor: 'text-amber-500', borderClass: 'border-amber-400', btnColor: 'bg-amber-400', claimed: false },
-                    { name: 'ひる', start: '07:30', end: '16:00', icon: '☁️', textColor: 'text-sky-500', borderClass: 'border-sky-400', btnColor: 'bg-sky-400', claimed: false },
-                    { name: 'ゆう', start: '16:00', end: '18:00', icon: '🌆', textColor: 'text-orange-500', borderClass: 'border-orange-400', btnColor: 'bg-orange-400', claimed: false },
-                    { name: 'よる', start: '18:00', end: '20:00', icon: '🌙', textColor: 'text-indigo-500', borderClass: 'border-indigo-400', btnColor: 'bg-indigo-400', claimed: false }
+                    { name: 'あさ（6：00～7:30）', start: '06:00', end: '07:30', icon: '☀️', textColor: 'text-amber-500', borderClass: 'border-amber-400', btnColor: 'bg-amber-400', claimed: false },
+                    { name: 'ひる（7：30～16:00）', start: '07:30', end: '16:00', icon: '☁️', textColor: 'text-sky-500', borderClass: 'border-sky-400', btnColor: 'bg-sky-400', claimed: false },
+                    { name: 'ゆう（16：00～18:00）', start: '16:00', end: '18:00', icon: '🌆', textColor: 'text-orange-500', borderClass: 'border-orange-400', btnColor: 'bg-orange-400', claimed: false },
+                    { name: 'よる（18：00～20:00）', start: '18:00', end: '20:00', icon: '🌙', textColor: 'text-indigo-500', borderClass: 'border-indigo-400', btnColor: 'bg-indigo-400', claimed: false }
                 ]);
 
                 const selectedDay = ref(['日','月','火','水','木','金','土'][new Date().getDay()]);
@@ -278,10 +278,10 @@
                 const currentBoss = ref(null);
 
                 const routineMaster = ref({
-                    morning: { name: "朝のミッション", icon: "☀️", btnColor: "bg-amber-400 border-amber-600", vercelUrl: "" },
-                    day: { name: "昼のミッション", icon: "☁️", btnColor: "bg-sky-400 border-sky-600", vercelUrl: "" },
-                    evening: { name: "夕のミッション", icon: "🌆", btnColor: "bg-orange-400 border-orange-600", vercelUrl: "" },
-                    night: { name: "夜のミッション", icon: "🌙", btnColor: "bg-indigo-400 border-indigo-600", vercelUrl: "" }
+                    morning: { name: "朝のしれん", icon: "☀️", btnColor: "bg-amber-400 border-amber-600", vercelUrl: "" },
+                    day: { name: "昼のしれん", icon: "☁️", btnColor: "bg-sky-400 border-sky-600", vercelUrl: "" },
+                    evening: { name: "夕のしれん", icon: "🌆", btnColor: "bg-orange-400 border-orange-600", vercelUrl: "" },
+                    night: { name: "夜のしれん", icon: "🌙", btnColor: "bg-indigo-400 border-indigo-600", vercelUrl: "" }
                 });
 
                 const updateClock = () => { currentTime.value = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); };
