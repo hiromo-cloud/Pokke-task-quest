@@ -12,7 +12,6 @@
         body { font-family: 'M PLUS Rounded 1c', sans-serif; transition: background-color 0.5s ease; overflow-x: hidden; }
         [v-cloak] { display: none; }
         .rounded-4xl { border-radius: 2rem; }
-        .rounded-5xl { border-radius: 3rem; }
         .animate-shake { animation: shake 0.3s ease-in-out; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         .animate-float { animation: float 3s ease-in-out infinite; }
@@ -49,12 +48,12 @@
             </div>
 
             <section class="bg-white/40 p-4 rounded-[3rem] border-4 border-dashed border-white shadow-inner flex justify-center gap-4">
-                <button @click="quickAddBP(50, 'いってらっしゃい！')" class="flex-1 max-w-[300px] py-6 px-4 rounded-full shadow-[0_12px_0_#be123c] bg-rose-500 text-white active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-3 animate-float"><span class="text-4xl">🚀</span><div class="text-left"><p class="text-xs font-black opacity-80 leading-none">GO!</p><p class="text-xl font-black">冒険へ行く！</p></div></button>
-                <button @click="quickAddBP(50, 'おかえりなさい！')" class="flex-1 max-w-[300px] py-6 px-4 rounded-full shadow-[0_12px_0_#047857] bg-emerald-500 text-white active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-3 animate-float" style="animation-delay:0.5s"><span class="text-4xl">🏰</span><div class="text-left"><p class="text-xs font-black opacity-80 leading-none">HOME</p><p class="text-xl font-black">ただいま帰還！</p></div></button>
+                <button @click="quickAddBP(50, 'いってらっしゃい！')" class="flex-1 max-w-[300px] py-6 px-4 rounded-full shadow-[0_12px_0_#be123c] bg-rose-500 text-white active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-3 animate-float"><span class="text-4xl">🚀</span><div class="text-left"><p class="text-xs font-black opacity-80 leading-none uppercase text-[10px]">Departure</p><p class="text-xl font-black">冒険へ行く！</p></div></button>
+                <button @click="quickAddBP(50, 'おかえりなさい！')" class="flex-1 max-w-[300px] py-6 px-4 rounded-full shadow-[0_12px_0_#047857] bg-emerald-500 text-white active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-3 animate-float" style="animation-delay: 0.5s"><span class="text-4xl">🏰</span><div class="text-left"><p class="text-xs font-black opacity-80 leading-none uppercase text-[10px]">Return</p><p class="text-xl font-black">ただいま帰還！</p></div></button>
             </section>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <button v-for="(r, key) in routineMaster" :key="key" @click="openRoutine(key)" class="p-4 rounded-3xl shadow-lg border-b-8 text-white transform active:scale-95 flex flex-col items-center justify-center text-center h-28" :class="r.btnColor">
+                <button v-for="(r, key) in routineMaster" :key="key" @click="openRoutine(key)" class="p-4 rounded-3xl shadow-lg border-b-8 text-white transition-all transform active:scale-95 flex flex-col items-center justify-center text-center h-28" :class="r.btnColor">
                     <span class="text-3xl mb-1">{{ r.icon }}</span><span class="text-xs font-black leading-tight">{{ r.name }}</span>
                 </button>
             </div>
@@ -66,33 +65,30 @@
                             <h2 class="text-2xl font-black flex items-center gap-2" :class="zone.textColor"><span>{{ zone.icon }}</span> {{ zone.name }}のエリア</h2>
                             <div class="text-sm font-black text-slate-400">🔑 {{ getZoneProgress(zone).done }} / {{ getZoneProgress(zone).total }}</div>
                         </div>
-                        <div class="bg-white/90 p-4 md:p-6 rounded-4xl shadow-xl border space-y-4 min-h-[80px]">
-                            <div v-for="(task, idx) in getTasksInZone(zone)" :key="task.id" 
-                                 class="flex items-center justify-between p-5 rounded-3xl border-l-[12px] shadow-md bg-white transition-all" 
-                                 :class="[zone.borderClass, task.isDone ? 'opacity-30 grayscale border-slate-200' : '']">
-                                
+                        <div class="bg-white/90 p-4 md:p-6 rounded-4xl shadow-xl border border-slate-100 space-y-4 min-h-[80px]">
+                            <div v-for="(task, idx) in getTasksInZone(zone)" :key="task.id" class="flex items-center justify-between p-5 rounded-3xl border-l-[12px] shadow-md bg-white transition-all" :class="[zone.borderClass, task.isDone ? 'opacity-30 grayscale border-slate-200' : '']">
                                 <div class="flex items-center gap-4 flex-1">
                                     <div class="flex flex-col gap-1 mr-2" v-if="!task.isDone">
-                                        <button @click="moveTask(task, -1)" class="p-1 text-slate-300 hover:text-blue-500 text-xs bg-slate-50 rounded shadow-sm">▲</button>
-                                        <button @click="moveTask(task, 1)" class="p-1 text-slate-300 hover:text-blue-500 text-xs bg-slate-50 rounded shadow-sm">▼</button>
+                                        <button @click="moveTask(task, -1)" class="p-1 text-slate-300 hover:text-blue-500 text-xs bg-slate-50 rounded">▲</button>
+                                        <button @click="moveTask(task, 1)" class="p-1 text-slate-300 hover:text-blue-500 text-xs bg-slate-50 rounded">▼</button>
                                     </div>
-                                    <input type="checkbox" v-model="task.isDone" @change="completeTask(task)" class="w-10 h-10 rounded-full border-4 border-blue-100">
+                                    <input type="checkbox" v-model="task.isDone" @change="completeTask(task)" class="w-10 h-10 rounded-full border-4 border-blue-100 shadow-inner">
                                     <p class="text-xl font-black">{{ task.title }} <span v-if="task.fixedDays && task.fixedDays.length > 0" class="ml-2 text-[10px] text-slate-400 px-2 py-0.5 rounded-full border">固定</span></p>
                                 </div>
-                                <button @click="deleteTask(task.id)" class="text-red-300 text-2xl font-black">✕</button>
+                                <button @click="deleteTask(task.id)" class="text-red-300 p-2 text-2xl font-black">✕</button>
                             </div>
                             <div v-if="isZoneComplete(zone) && !isZoneClaimed(zone)" class="py-6 flex flex-col items-center justify-center bg-gradient-to-b from-amber-50 rounded-3xl border-4 border-dashed border-amber-300">
-                                <p class="text-amber-600 mb-4 uppercase font-black italic">Area Clear!!</p><div @click="claimZoneReward(zone)" class="text-8xl chest-bounce">🎁</div>
+                                <p class="text-amber-600 font-black text-xl mb-4 uppercase italic">Area Clear!!</p>
+                                <div @click="claimZoneReward(zone)" class="text-8xl chest-bounce">🎁</div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="space-y-6">
                     <div class="bg-white p-6 rounded-4xl shadow-xl border-orange-200 flex flex-col">
-                        <div class="flex justify-between items-center mb-4"><h3 class="text-orange-400 font-black uppercase text-center flex-1 tracking-widest">Inventory</h3><button @click="isEditingInventory = !isEditingInventory" class="text-[10px] px-3 py-1 rounded-full font-black bg-slate-100">{{ isEditingInventory ? '完了' : '編集' }}</button></div>
+                        <div class="flex justify-between items-center mb-4"><h3 class="text-orange-400 font-black uppercase text-center flex-1 tracking-widest tracking-widest">Inventory</h3><button @click="isEditingInventory = !isEditingInventory" class="text-[10px] px-3 py-1 rounded-full font-black bg-slate-100">{{ isEditingInventory ? '完了' : '編集' }}</button></div>
                         <div class="space-y-2 max-h-[400px] overflow-y-auto scrollbar-hide">
-                            <div v-for="(item, idx) in itemPresets" :key="idx" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border shadow-sm transition-all">
+                            <div v-for="(item, idx) in itemPresets" :key="idx" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm transition-all">
                                 <template v-if="!isEditingInventory"><input type="checkbox" class="w-6 h-6 rounded text-orange-500 border-2 shadow-inner"><span class="text-sm font-black">{{ item }}</span></template>
                                 <template v-else><span class="flex-1 text-sm font-black">{{ item }}</span><button @click="itemPresets.splice(idx, 1)" class="text-red-500 font-bold p-1">✕</button></template>
                             </div>
@@ -108,9 +104,10 @@
                 <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide"><button v-for="t in taskTemplates" @click="addFromPreset(t)" class="whitespace-nowrap bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-xs font-black border-2 border-blue-200">+ {{ t.title }}</button></div>
                 <div class="flex items-stretch gap-3">
                     <div class="flex-1 space-y-2">
-                        <input v-model="newTask.title" placeholder="新しいミッション..." class="w-full p-4 rounded-2xl border-2 border-blue-100 font-black outline-none shadow-inner bg-white text-xl">
-                        <div class="flex items-center gap-1"><span class="text-[9px] font-black text-slate-400 uppercase">Repeat:</span>
+                        <input v-model="newTask.title" placeholder="ミッション名を入力..." class="w-full p-4 rounded-2xl border-2 border-blue-100 font-black outline-none shadow-inner bg-white text-xl">
+                        <div class="flex items-center gap-1"><span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Repeat:</span>
                             <button v-for="day in ['月','火','水','木','金','土','日']" :key="day" @click="toggleRepeatDay(day)" :class="newTask.fixedDays.includes(day) ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-400'" class="w-7 h-7 rounded-full text-[9px] border transition-all font-black">{{ day }}</button>
+                            <button @click="setEveryday" class="ml-1 px-2 py-1 text-[8px] bg-slate-800 text-white rounded font-black">Everyday</button>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-1 w-32 md:w-48 shrink-0">
@@ -122,83 +119,110 @@
         </div>
 
         <div v-if="isAdminView" class="fixed inset-0 z-[100] bg-white overflow-y-auto p-4 text-slate-800">
-            <div class="max-w-3xl mx-auto space-y-8 pb-40">
-                <div class="flex justify-between items-center sticky top-0 bg-white py-4 border-b-2 z-10"><h2 class="text-2xl font-black text-red-600 uppercase">Master Panel</h2><button @click="isAdminView = false" class="bg-slate-800 text-white px-6 py-2 rounded-xl">閉じる</button></div>
-                <section class="p-6 bg-slate-100 rounded-4xl border-2 border-slate-300 space-y-4">
-                    <h3 class="text-xl font-black text-slate-600">📡 同期システム</h3>
-                    <div class="bg-white p-4 rounded-3xl space-y-4 border">
-                        <textarea readonly class="w-full h-20 p-2 text-[8px] bg-slate-50 border rounded font-mono" :value="JSON.stringify(monsterMaster)"></textarea>
-                        <button @click="copySyncCode" class="w-full py-2 bg-slate-800 text-white rounded-xl text-xs">同期コードをコピー</button>
-                        <input v-model="importCode" placeholder="コードを貼り付け" class="w-full p-2 text-[10px] border rounded bg-slate-50 font-mono">
-                        <button @click="importMonsters" class="w-full py-2 bg-red-500 text-white rounded-xl text-xs">読み込む</button>
-                    </div>
-                </section>
-                <section class="p-6 bg-red-50 rounded-4xl border-2 border-red-100 space-y-4">
-                    <h3 class="text-xl font-black text-red-600">👾 モンスター召喚</h3>
+            <div class="max-w-4xl mx-auto space-y-8 pb-40">
+                <div class="flex justify-between items-center sticky top-0 bg-white py-4 border-b-2 z-10 text-slate-800"><h2 class="text-2xl font-black text-red-600 uppercase italic">Guild Master Settings</h2><button @click="isAdminView = false" class="bg-slate-800 text-white px-6 py-2 rounded-xl font-black shadow-lg">閉じる</button></div>
+                
+                <section class="p-6 bg-red-50 rounded-4xl border-2 border-red-100 space-y-6 text-slate-800 shadow-md">
+                    <h3 class="text-xl font-black text-red-600 flex items-center gap-2">👾 モンスター召喚 (試練の追加)</h3>
                     <div class="bg-white p-6 rounded-3xl border-4 border-dashed border-red-200 space-y-4">
-                        <div class="grid grid-cols-2 gap-2"><input v-model="newMonster.name" placeholder="なまえ" class="p-3 border rounded-2xl text-sm"><input v-model="newMonster.icon" placeholder="絵文字" class="p-3 border rounded-2xl text-sm text-center"></div>
-                        <input v-model="newMonster.image" placeholder="画像URL" class="w-full p-3 border rounded-2xl text-xs">
-                        <div class="flex gap-2"><input type="number" v-model.number="newMonster.maxHp" placeholder="HP" class="w-1/2 p-3 border rounded-2xl text-center"><select v-model="newMonster.type" class="w-1/2 p-3 border rounded-2xl"><option v-for="(g, k) in gemMaster" :value="k">{{ g.icon }} {{ k }}</option></select></div>
-                        <button @click="addMonster" class="w-full py-4 bg-red-500 text-white rounded-2xl font-black shadow-lg">+ 登録</button>
+                        <p class="text-xs text-red-400 font-black text-center uppercase tracking-widest">Register New Trial</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input v-model="newMonster.name" placeholder="なまえ" class="p-3 border rounded-2xl text-sm bg-slate-50 outline-none">
+                            <input v-model="newMonster.icon" placeholder="絵文字" class="p-3 border rounded-2xl text-sm text-center bg-slate-50">
+                        </div>
+                        <input v-model="newMonster.image" placeholder="画像URL (https://...)" class="w-full p-3 border rounded-2xl text-xs font-mono bg-slate-50 outline-none">
+                        <div class="flex gap-2">
+                            <input type="number" v-model.number="newMonster.maxHp" placeholder="HP" class="w-1/2 p-3 border rounded-2xl font-black text-center text-blue-600">
+                            <select v-model="newMonster.type" class="w-1/2 p-3 border rounded-2xl font-black bg-slate-50">
+                                <option v-for="(g, k) in gemMaster" :value="k">{{ g.icon }} {{ k }}属性</option>
+                            </select>
+                        </div>
+                        <button @click="addMonster" class="w-full py-4 bg-red-500 text-white rounded-2xl font-black shadow-lg">+ 図鑑に登録する</button>
                     </div>
                     <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
-                        <div v-for="(m, i) in monsterMaster" :key="m.id" class="bg-white p-3 rounded-2xl border flex items-center gap-3 shadow-sm"><span class="text-2xl">{{ m.icon }}</span><div class="flex-1 text-sm font-black">{{ m.name }} (HP:{{ m.maxHp }})</div><button @click="monsterMaster.splice(i, 1)" class="text-red-300 text-xs underline">消去</button></div>
+                        <div v-for="(m, i) in monsterMaster" :key="m.id" class="bg-white p-3 rounded-2xl border flex items-center gap-3 shadow-sm">
+                            <span class="text-2xl">{{ m.icon }}</span>
+                            <div class="flex-1 min-w-0"><p class="text-sm font-black truncate">{{ m.name }}</p><p class="text-[9px] text-slate-400 font-black">HP:{{ m.maxHp }} / {{ gemMaster[m.type]?.icon }}</p></div>
+                            <button @click="monsterMaster.splice(i, 1)" class="text-red-300 text-xs underline font-black shrink-0">消去</button>
+                        </div>
                     </div>
                 </section>
-                <section class="p-6 bg-blue-50 rounded-4xl border-2 border-blue-100 space-y-4 shadow-sm text-slate-800">
-                    <h3 class="text-xl font-black text-blue-600">🌐 特別ミッションURL設定</h3>
-                    <div v-for="(r, key) in routineMaster" :key="key" class="space-y-1 bg-white p-3 rounded-2xl border"><label class="text-[10px] text-blue-400 font-black uppercase tracking-widest">{{ r.name }}</label><input v-model="r.vercelUrl" class="w-full p-2 text-xs border rounded-lg font-mono outline-none" placeholder="https://..."></div>
+
+                <section class="p-6 bg-amber-50 rounded-4xl border-2 border-amber-200 space-y-4 shadow-md">
+                    <h3 class="text-xl font-black text-amber-600 flex items-center gap-2">📝 ミッションの編集・削除</h3>
+                    <div class="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
+                        <button v-for="d in ['月','火','水','木','金','土','日']" :key="d" @click="adminSelectedDay = d" :class="adminSelectedDay === d ? 'bg-amber-500 text-white shadow-md' : 'bg-white border text-amber-400'" class="px-4 py-2 rounded-xl text-xs font-black shrink-0 transition-all">{{ d }}曜日</button>
+                    </div>
+                    <div class="space-y-2 bg-white/50 p-4 rounded-3xl border border-amber-100 min-h-[150px]">
+                        <div v-for="t in allTasks[adminSelectedDay]" :key="t.id" class="flex gap-2 items-center bg-white p-3 rounded-2xl shadow-sm">
+                            <input v-model="t.title" class="flex-1 bg-slate-50 p-2 rounded-xl text-sm font-black outline-none focus:ring-2 focus:ring-amber-300">
+                            <button @click="deleteTask(t.id)" class="text-red-300 p-2 font-black">✕</button>
+                        </div>
+                        <div v-if="allTasks[adminSelectedDay].length === 0" class="text-center py-10 text-slate-300 italic text-sm">タスクはありません</div>
+                    </div>
                 </section>
+
+                <section class="p-6 bg-slate-100 rounded-4xl border-2 space-y-4 shadow-md">
+                    <h3 class="text-xl font-black text-slate-600 flex items-center gap-2">📡 ギルド全体・同期システム</h3>
+                    <div class="bg-white p-4 rounded-3xl space-y-4 border">
+                        <p class="text-[10px] text-slate-400 uppercase font-black">Sync Code</p>
+                        <textarea readonly class="w-full h-20 p-2 text-[8px] bg-slate-50 border rounded font-mono" :value="JSON.stringify(monsterMaster)"></textarea>
+                        <button @click="copySyncCode" class="w-full py-2 bg-slate-800 text-white rounded-xl text-xs font-black">同期コードをコピー</button>
+                        <input v-model="importCode" placeholder="同期コードをここに貼り付け" class="w-full p-2 text-[10px] border rounded bg-slate-50 font-mono">
+                        <button @click="importMonsters" class="w-full py-2 bg-red-500 text-white rounded-xl text-xs font-black">コードから読み込む</button>
+                    </div>
+                </section>
+
+                <section class="p-6 bg-blue-50 rounded-4xl border-2 border-blue-100 space-y-4 shadow-md">
+                    <h3 class="text-xl font-black text-blue-600 flex items-center gap-2">🌐 特別ミッションURL設定</h3>
+                    <div v-for="(r, key) in routineMaster" :key="key" class="space-y-1 bg-white p-3 rounded-2xl border text-slate-800"><label class="text-[10px] text-blue-400 font-black uppercase tracking-widest">{{ r.name }}</label><input v-model="r.vercelUrl" class="w-full p-2 text-xs border rounded-lg font-mono outline-none bg-slate-50" placeholder="https://..."></div>
+                </section>
+                <div class="text-center py-10"><button @click="clearAllData" class="text-[10px] text-slate-300 underline font-black uppercase">Reset All Cache</button></div>
             </div>
         </div>
 
         <div v-if="activeRoutineKey" class="fixed inset-0 z-50 bg-slate-900 flex flex-col p-2 text-slate-800">
             <div class="bg-white rounded-t-4xl p-4 flex justify-between items-center shadow-lg border-b-2">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">{{ routineMaster[activeRoutineKey].icon }}</span>
-                    <h3 class="text-xl font-black">{{ routineMaster[activeRoutineKey].name }}</h3>
-                </div>
+                <div class="flex items-center gap-3"><span class="text-2xl">{{ routineMaster[activeRoutineKey].icon }}</span><h3 class="text-xl font-black text-slate-800">{{ routineMaster[activeRoutineKey].name }}</h3></div>
                 <div class="flex gap-2">
-                    <a :href="routineMaster[activeRoutineKey].vercelUrl" target="_blank" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-xl text-xs font-black flex items-center">外で開く ↗</a>
-                    <button @click="finishVercelRoutine" class="bg-orange-500 text-white px-6 py-2 rounded-xl font-black shadow-md">完了！報酬GET</button>
+                    <a :href="routineMaster[activeRoutineKey].vercelUrl" target="_blank" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-xl text-xs font-black flex items-center shadow-sm">外で開く ↗</a>
+                    <button @click="finishVercelRoutine" class="bg-orange-500 text-white px-6 py-2 rounded-xl font-black shadow-md text-sm">完了！報酬GET</button>
                 </div>
             </div>
-            <div class="flex-1 bg-white overflow-hidden rounded-b-4xl shadow-inner relative">
-                <iframe v-if="routineMaster[activeRoutineKey].vercelUrl" :src="routineMaster[activeRoutineKey].vercelUrl" class="w-full h-full border-none"></iframe>
-                <div v-else class="h-full flex items-center justify-center text-slate-300 font-black italic">URLを設定してください</div>
-            </div>
+            <div class="flex-1 bg-white overflow-hidden rounded-b-4xl shadow-inner relative"><iframe v-if="routineMaster[activeRoutineKey].vercelUrl" :src="routineMaster[activeRoutineKey].vercelUrl" class="w-full h-full border-none"></iframe><div v-else class="h-full flex items-center justify-center text-slate-300 font-black italic uppercase">No URL...</div></div>
         </div>
 
         <div v-if="showCollection" class="fixed inset-0 z-[100] bg-slate-900/95 overflow-y-auto p-4 md:p-8 backdrop-blur-lg">
-            <div class="max-w-6xl mx-auto"><div class="flex justify-between items-center mb-10 text-white"><h2 class="text-4xl font-black text-amber-400 italic tracking-widest">COLLECTION</h2><button @click="showCollection = false" class="bg-white/10 px-6 py-2 rounded-2xl font-black text-white border-2 border-white/20">とじる</button></div>
+            <div class="max-w-6xl mx-auto text-white"><div class="flex justify-between items-center mb-10"><h2 class="text-4xl font-black text-amber-400 italic tracking-widest uppercase">Monster Cards</h2><button @click="showCollection = false" class="bg-white/10 px-6 py-2 rounded-2xl font-black border-2 border-white/20">とじる</button></div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-slate-800">
-                <div v-for="card in defeatedCollection" :key="card.timestamp" class="monster-card rounded-3xl p-4 flex flex-col items-center shadow-2xl transition-all">
+                <div v-for="card in defeatedCollection" :key="card.timestamp" class="monster-card rounded-3xl p-4 flex flex-col items-center shadow-2xl transition-all transform hover:rotate-1">
                     <div class="w-full bg-black/5 rounded-xl py-1 px-3 mb-2 flex justify-between items-center text-xs font-black text-slate-800"><span>{{ card.name }}</span><span>{{ gemMaster[card.type]?.icon }}</span></div>
-                    <div class="w-full aspect-square bg-white rounded-xl mb-3 flex items-center justify-center overflow-hidden border border-black/5"><img v-if="card.image" :src="card.image" class="w-full h-full object-contain"><span v-else class="text-7xl">{{ card.icon }}</span></div>
-                    <div class="w-full text-center border-t border-black/10 pt-2 font-mono text-[10px] text-amber-600 font-black">Defeated on: {{ card.date }}</div>
+                    <div class="w-full aspect-square bg-white rounded-xl mb-3 flex items-center justify-center overflow-hidden border-2 border-black/5"><img v-if="card.image" :src="card.image" class="w-full h-full object-contain"><span v-else class="text-7xl">{{ card.icon }}</span></div>
+                    <div class="w-full text-center border-t border-black/10 pt-2 font-mono text-[9px] text-amber-600 font-black uppercase">たおした日: {{ card.date }}</div>
                 </div>
             </div></div>
         </div>
 
         <div v-if="isBattleView" class="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center p-4 text-white text-center">
             <div class="max-w-2xl w-full bg-slate-800 rounded-5xl border-4 border-slate-700 p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
-                <button @click="isBattleView = false" class="absolute top-4 right-6 text-slate-400 text-6xl hover:text-white transition-colors">✕</button>
+                <button @click="isBattleView = false" class="absolute top-4 right-6 text-slate-400 text-6xl hover:text-white">✕</button>
                 <div class="text-yellow-400 text-6xl font-black mb-10 drop-shadow-lg">{{ battlePoints }} <span class="text-2xl font-black">BP</span></div>
                 <div v-if="currentBoss" class="flex flex-col items-center">
                     <div :class="{'animate-shake': isAttacking}" class="w-64 h-64 mb-10 flex items-center justify-center relative"><img v-if="currentBoss.image" :src="currentBoss.image" class="w-full h-full object-contain filter drop-shadow-2xl"><span v-else class="text-[10rem]">{{ currentBoss.icon }}</span></div>
-                    <div class="w-full mb-10 px-4 text-left font-black text-red-400 tracking-wider flex justify-between uppercase"><span>{{ currentBoss.name }}</span><span>HP: {{ currentBoss.hp }}</span></div>
+                    <div class="w-full mb-10 px-4 text-left font-black text-red-400 flex justify-between uppercase"><span>{{ currentBoss.name }}</span><span>HP: {{ currentBoss.hp }}</span></div>
                     <div class="w-full h-5 bg-slate-900 rounded-full border-2 border-slate-600 overflow-hidden mb-10"><div class="h-full bg-gradient-to-r from-red-600 to-orange-400 transition-all duration-500" :style="{ width: (currentBoss.hp / currentBoss.maxHp) * 100 + '%' }"></div></div>
                     <button @click="attackMonster" :disabled="battlePoints === 0" class="w-full py-8 bg-red-600 rounded-4xl text-4xl font-black active:translate-y-2 shadow-[0_12px_0_#991b1b] transition-all">こうげき！</button>
                 </div>
+                <div v-else class="py-20 text-slate-400 italic">No Trial Registered...</div>
             </div>
         </div>
 
         <div v-if="showPassModal" class="fixed inset-0 z-[200] bg-slate-900/90 flex items-center justify-center p-6 backdrop-blur-lg">
-            <div class="bg-white w-full max-w-sm rounded-5xl p-8 shadow-2xl text-center border-8 border-red-400 text-slate-800"><h3 class="text-2xl font-black mb-6 uppercase tracking-widest text-slate-800">🛡️ Master Auth</h3><input type="password" v-model="passInput" placeholder="1234" class="w-full p-4 rounded-3xl border-4 text-3xl text-center font-black outline-none mb-6 shadow-inner bg-slate-50 shadow-inner"><div class="flex gap-3"><button @click="showPassModal = false" class="flex-1 py-4 bg-slate-100 rounded-3xl font-black text-slate-400 text-slate-800">Cancel</button><button @click="checkPassword" class="flex-2 px-8 py-4 bg-red-500 text-white rounded-3xl font-black shadow-lg">Enter</button></div></div>
+            <div class="bg-white w-full max-w-sm rounded-5xl p-8 shadow-2xl text-center border-8 border-red-400 text-slate-800"><h3 class="text-2xl font-black mb-6 uppercase tracking-widest text-slate-800">🛡️ Guild Login</h3><input type="password" v-model="passInput" placeholder="1234" class="w-full p-4 rounded-3xl border-4 text-3xl text-center font-black outline-none mb-6 shadow-inner bg-slate-50"><div class="flex gap-3"><button @click="showPassModal = false" class="flex-1 py-4 bg-slate-100 rounded-3xl font-black text-slate-400">Cancel</button><button @click="checkPassword" class="flex-2 px-8 py-4 bg-red-500 text-white rounded-3xl font-black shadow-lg">Login</button></div></div>
         </div>
-        <div v-if="showThemeModal" class="fixed inset-0 z-[200] bg-slate-900/80 flex items-center justify-center p-6 text-slate-800"><div class="bg-white w-full max-w-sm rounded-5xl p-8 shadow-2xl text-center"><h3 class="text-2xl font-black mb-8 uppercase tracking-widest">🎨 Change Theme</h3><div class="grid grid-cols-2 gap-4"><button v-for="t in ['sky','forest','lava','midnight']" @click="currentTheme = t; showThemeModal = false" class="p-4 rounded-3xl border-2 font-black border-slate-200 active:scale-95 transition-all shadow-sm" :class="'theme-'+t">{{ t.toUpperCase() }}</button></div></div></div>
+        <div v-if="showThemeModal" class="fixed inset-0 z-[200] bg-slate-900/80 flex items-center justify-center p-6 text-slate-800"><div class="bg-white w-full max-w-sm rounded-5xl p-8 shadow-2xl text-center"><h3 class="text-2xl font-black mb-8 uppercase tracking-widest italic">Theme Selection</h3><div class="grid grid-cols-2 gap-4"><button v-for="t in ['sky','forest','lava','midnight']" @click="currentTheme = t; showThemeModal = false" class="p-4 rounded-3xl border-2 font-black border-slate-200 active:scale-95 transition-all shadow-sm" :class="'theme-'+t">{{ t.toUpperCase() }}</button></div></div></div>
         <div v-if="!profile.name || isEditingProfile" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4 text-center text-slate-800">
-            <div class="bg-white w-full max-w-md rounded-5xl p-8 shadow-2xl border-8 border-blue-400 text-left"><h3 class="text-2xl font-black mb-8 uppercase text-center text-blue-500 italic text-3xl">⚔️ Hero Profile</h3><div class="space-y-6"><div><label class="text-[10px] text-slate-400 px-2 font-black uppercase tracking-widest">Name</label><input v-model="tempProfile.name" class="w-full p-4 rounded-3xl border-4 font-black text-2xl outline-none shadow-inner bg-slate-50"></div><div><label class="text-[10px] text-slate-400 px-2 font-black uppercase tracking-widest">Icon</label><div class="grid grid-cols-4 gap-2"><button v-for="i in ['⚔️','🪄','🏹','🛡️','🐲','🤖','🐥','🎀']" @click="tempProfile.icon = i" :class="tempProfile.icon===i?'bg-blue-500 text-white border-blue-600 shadow-md':'bg-slate-50 border-slate-100'" class="p-3 rounded-2xl text-2xl border-2 transition-all shadow-sm">{{ i }}</button></div></div><button @click="saveProfile" :disabled="!tempProfile.name" class="w-full py-6 bg-blue-500 text-white rounded-3xl text-2xl font-black shadow-lg">ぼうけんを開始！</button></div></div>
+            <div class="bg-white w-full max-w-md rounded-5xl p-8 shadow-2xl border-8 border-blue-400 text-left"><h3 class="text-2xl font-black mb-8 uppercase text-center text-blue-500 italic text-3xl">⚔️ Hero Profile</h3><div class="space-y-6"><div><label class="text-[10px] text-slate-400 px-2 font-black uppercase tracking-widest">Name</label><input v-model="tempProfile.name" class="w-full p-4 rounded-3xl border-4 text-2xl font-black outline-none shadow-inner bg-slate-50"></div><div><label class="text-[10px] text-slate-400 px-2 font-black uppercase tracking-widest">Icon</label><div class="grid grid-cols-4 gap-2"><button v-for="i in ['⚔️','🪄','🏹','🛡️','🐲','🤖','🐥','🎀']" @click="tempProfile.icon = i" :class="tempProfile.icon===i?'bg-blue-500 text-white border-blue-600 shadow-md':'bg-slate-50 border-slate-100'" class="p-3 rounded-2xl text-2xl border-2 transition-all shadow-sm">{{ i }}</button></div></div><button @click="saveProfile" :disabled="!tempProfile.name" class="w-full py-6 bg-blue-500 text-white rounded-3xl text-2xl font-black shadow-lg">冒険を開始する！</button></div></div>
         </div>
 
     </div>
@@ -225,16 +249,16 @@
                 const defeatedCollection = ref([]);
 
                 const timeZones = ref([
-                    { name: 'あさ（6：00～7:30）', start: '06:00', end: '07:30', icon: '☀️', textColor: 'text-amber-500', borderClass: 'border-amber-400', btnColor: 'bg-amber-400', claimed: false },
-                    { name: 'ひる（7：30～16:00）', start: '07:30', end: '16:00', icon: '☁️', textColor: 'text-sky-500', borderClass: 'border-sky-400', btnColor: 'bg-sky-400', claimed: false },
-                    { name: 'ゆう（16：00～18:00）', start: '16:00', end: '18:00', icon: '🌆', textColor: 'text-orange-500', borderClass: 'border-orange-400', btnColor: 'bg-orange-400', claimed: false },
-                    { name: 'よる（18：00～20:00）', start: '18:00', end: '20:00', icon: '🌙', textColor: 'text-indigo-500', borderClass: 'border-indigo-400', btnColor: 'bg-indigo-400', claimed: false }
+                    { name: 'あさ', start: '06:00', end: '07:30', icon: '☀️', textColor: 'text-amber-500', borderClass: 'border-amber-400', btnColor: 'bg-amber-400', claimed: false },
+                    { name: 'ひる', start: '07:30', end: '16:00', icon: '☁️', textColor: 'text-sky-500', borderClass: 'border-sky-400', btnColor: 'bg-sky-400', claimed: false },
+                    { name: 'ゆう', start: '16:00', end: '18:00', icon: '🌆', textColor: 'text-orange-500', borderClass: 'border-orange-400', btnColor: 'bg-orange-400', claimed: false },
+                    { name: 'よる', start: '18:00', end: '20:00', icon: '🌙', textColor: 'text-indigo-500', borderClass: 'border-indigo-400', btnColor: 'bg-indigo-400', claimed: false }
                 ]);
 
                 const selectedDay = ref(['日','月','火','水','木','金','土'][new Date().getDay()]);
+                const adminSelectedDay = ref('月');
                 const allTasks = ref({ '月': [], '火': [], '水': [], '木': [], '金': [], '土': [], '日': [] });
                 
-                // 🌟 タスク取得ロジック（そのまま表示するようシンプルに）
                 const getTasksInZone = (zone) => {
                     const tasks = allTasks.value[selectedDay.value] || [];
                     const startM = zone.start.split(':').map(Number).reduce((h,m)=>h*60+m);
@@ -244,18 +268,15 @@
                         return mins >= startM && mins < endM;
                     });
                 };
-
                 const getZoneProgress = (zone) => { const tasks = getTasksInZone(zone); return { done: tasks.filter(t => t.isDone).length, total: tasks.length }; };
                 const isZoneComplete = (zone) => { const p = getZoneProgress(zone); return p.total > 0 && p.done === p.total; };
                 const isZoneClaimed = (zone) => zone.claimed;
                 const claimZoneReward = (zone) => { zone.claimed = true; battlePoints.value += 100; gemInventory.value[Object.keys(gemMaster)[Math.floor(Math.random()*5)]]++; confetti({ particleCount: 300, origin: { y: 0.6 } }); };
 
-                // 🌟 タスク移動（並べ替え）ロジック
                 const moveTask = (task, direction) => {
                     const dayTasks = allTasks.value[selectedDay.value];
                     const index = dayTasks.findIndex(t => t.id === task.id);
                     if (index === -1) return;
-                    
                     const newIndex = index + direction;
                     if (newIndex >= 0 && newIndex < dayTasks.length) {
                         const temp = dayTasks[index];
@@ -266,22 +287,25 @@
 
                 const newTask = ref({ title: "", bp: 10, startTime: "", endTime: "", selectedZone: null, fixedDays: [] });
                 const toggleRepeatDay = (day) => { const idx = newTask.value.fixedDays.indexOf(day); if(idx>-1) newTask.value.fixedDays.splice(idx,1); else newTask.value.fixedDays.push(day); };
+                const setEveryday = () => { newTask.value.fixedDays = ['月','火','水','木','金','土','日']; };
+
                 const isEditingInventory = ref(false);
                 const itemPresets = ref(["連絡帳", "水筒", "上靴"]);
                 const newItemNameChild = ref("");
                 const addItemPresetChild = () => { if(newItemNameChild.value){ itemPresets.value.push(newItemNameChild.value); newItemNameChild.value = ""; } };
                 const taskTemplates = ref([{ title: "こくご", bp: 20 }, { title: "さんすう", bp: 20 }]);
                 const gemMaster = { water: { icon: "💧" }, fire: { icon: "🔥" }, gold: { icon: "✨" }, wood: { icon: "🌳" }, earth: { icon: "⛰️" } };
+                
                 const monsterMaster = ref([{ id: 1, name: "オレンジマン", hp: 150, maxHp: 150, icon: "🍊", type: "wood", image: "./images/orangeman.png" }]);
                 const newMonster = ref({ name: "", icon: "🐲", maxHp: 200, type: "fire", image: "" });
-                const addMonster = () => { if(newMonster.value.name){ monsterMaster.value.push({...newMonster.value, id: Date.now(), hp: newMonster.value.maxHp}); Object.assign(newMonster.value, {name:"",icon:"🐲",maxHp:200,type:"fire",image:""}); alert("召喚成功！"); } };
+                const addMonster = () => { if(newMonster.value.name){ monsterMaster.value.push({...newMonster.value, id: Date.now(), hp: newMonster.value.maxHp}); Object.assign(newMonster.value, {name:"",icon:"🐲",maxHp:200,type:"fire",image:""}); alert("登録完了！"); } };
                 const currentBoss = ref(null);
 
                 const routineMaster = ref({
-                    morning: { name: "朝のしれん", icon: "☀️", btnColor: "bg-amber-400 border-amber-600", vercelUrl: "" },
-                    day: { name: "昼のしれん", icon: "☁️", btnColor: "bg-sky-400 border-sky-600", vercelUrl: "" },
-                    evening: { name: "夕のしれん", icon: "🌆", btnColor: "bg-orange-400 border-orange-600", vercelUrl: "" },
-                    night: { name: "夜のしれん", icon: "🌙", btnColor: "bg-indigo-400 border-indigo-600", vercelUrl: "" }
+                    morning: { name: "朝のミッション", icon: "☀️", btnColor: "bg-amber-400 border-amber-600", vercelUrl: "" },
+                    day: { name: "昼のミッション", icon: "☁️", btnColor: "bg-sky-400 border-sky-600", vercelUrl: "" },
+                    evening: { name: "夕のミッション", icon: "🌆", btnColor: "bg-orange-400 border-orange-600", vercelUrl: "" },
+                    night: { name: "夜のミッション", icon: "🌙", btnColor: "bg-indigo-400 border-indigo-600", vercelUrl: "" }
                 });
 
                 const updateClock = () => { currentTime.value = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); };
@@ -289,11 +313,11 @@
                 const checkPassword = () => { if (passInput.value === "1234") { isAdminView.value = true; showPassModal.value = false; passInput.value = ''; } };
                 const openRoutine = (k) => activeRoutineKey.value = k;
                 const activeRoutineKey = ref(null);
-                const quickAddBP = (amount, msg) => { battlePoints.value += amount; confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); alert(`${msg}\n50 BP ゲット！`); };
+                const quickAddBP = (amount, msg) => { battlePoints.value += amount; confetti({ particleCount: 150 }); alert(msg + "\n50 BP ゲット！"); };
                 const finishVercelRoutine = () => { battlePoints.value += 50; gemInventory.value[Object.keys(gemMaster)[Math.floor(Math.random()*5)]]++; activeRoutineKey.value = null; confetti({ particleCount: 150 }); };
 
                 const addTask = () => { if (newTask.value.title && newTask.value.selectedZone) { const zone = newTask.value.selectedZone; const taskObj = { id: Date.now(), title: newTask.value.title, bp: newTask.value.bp, startTime: zone.start, endTime: zone.end, isDone: false, fixedDays: [...newTask.value.fixedDays] }; if (newTask.value.fixedDays.length > 0) { newTask.value.fixedDays.forEach(d => { allTasks.value[d].push({ ...taskObj, id: Date.now() + Math.random() }); }); } else { allTasks.value[selectedDay.value].push(taskObj); } newTask.value.title = ""; newTask.value.fixedDays = []; } };
-                const deleteTask = (id) => { const idx = allTasks.value[selectedDay.value].findIndex(t => t.id === id); if(idx>-1) allTasks.value[selectedDay.value].splice(idx,1); };
+                const deleteTask = (id) => { Object.keys(allTasks.value).forEach(d => { const idx = allTasks.value[d].findIndex(t => t.id === id); if(idx > -1) allTasks.value[d].splice(idx, 1); }); };
                 const completeTask = (t) => { if (t.isDone) { battlePoints.value += t.bp; confetti({ particleCount: 50, origin: {y:0.8} }); } };
 
                 const attackMonster = () => {
@@ -301,20 +325,20 @@
                         isAttacking.value = true; currentBoss.value.hp -= battlePoints.value; battlePoints.value = 0;
                         if (currentBoss.value.hp <= 0) {
                             const now = new Date(); defeatedCollection.value.unshift({ ...JSON.parse(JSON.stringify(currentBoss.value)), date: `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`, timestamp: Date.now() });
-                            confetti({ particleCount: 250, origin: {y:0.6} });
+                            confetti({ particleCount: 250 });
                             setTimeout(() => { const idx = monsterMaster.value.findIndex(m => m.id === currentBoss.value.id); const next = monsterMaster.value[(idx + 1) % monsterMaster.value.length]; if (next) currentBoss.value = JSON.parse(JSON.stringify(next)); }, 1000);
                         }
                         setTimeout(() => isAttacking.value = false, 500);
                     }
                 };
 
-                const copySyncCode = () => { navigator.clipboard.writeText(JSON.stringify(monsterMaster.value)); alert("コピー成功！"); };
+                const copySyncCode = () => { navigator.clipboard.writeText(JSON.stringify(monsterMaster.value)); alert("コードをコピーしました！"); };
                 const importCode = ref("");
-                const importMonsters = () => { try { const data = JSON.parse(importCode.value); if(Array.isArray(data)){ monsterMaster.value = data; alert("読み込み成功！"); } } catch(e) { alert("コードが正しくありません"); } };
+                const importMonsters = () => { try { const data = JSON.parse(importCode.value); if(Array.isArray(data)){ monsterMaster.value = data; importCode.value = ""; alert("同期完了！"); } } catch(e) { alert("無効なコードです"); } };
 
                 onMounted(() => {
                     updateClock(); setInterval(updateClock, 1000);
-                    const saved = localStorage.getItem('pokke_adventure_v21');
+                    const saved = localStorage.getItem('pokke_adventure_v23');
                     if (saved) {
                         const d = JSON.parse(saved);
                         Object.assign(battlePoints, {value: d.battlePoints}); Object.assign(gemInventory, {value: d.gemInventory});
@@ -329,7 +353,7 @@
                 });
 
                 watch([battlePoints, gemInventory, inventory, allTasks, routineMaster, itemPresets, currentTheme, profile, monsterMaster, defeatedCollection, timeZones], () => {
-                    localStorage.setItem('pokke_adventure_v21', JSON.stringify({ 
+                    localStorage.setItem('pokke_adventure_v23', JSON.stringify({ 
                         battlePoints: battlePoints.value, gemInventory: gemInventory.value, inventory: inventory.value, 
                         allTasks: allTasks.value, routineMaster: routineMaster.value, itemPresets: itemPresets.value, 
                         currentTheme: currentTheme.value, profile: profile.value, 
@@ -339,10 +363,10 @@
 
                 return {
                     currentTime, battlePoints, gemInventory, inventory, currentTheme, profile, tempProfile, isEditingProfile, showThemeModal, isBattleView, isAttacking, isAdminView, showPassModal, passInput,
-                    selectedDay, tasks: computed(()=>allTasks.value[selectedDay.value]), allTasks, newTask, itemPresets, isEditingInventory, newItemNameChild, addItemPresetChild,
+                    selectedDay, adminSelectedDay, tasks: computed(()=>allTasks.value[selectedDay.value]), allTasks, newTask, taskTemplates, itemPresets, isEditingInventory, newItemNameChild, addItemPresetChild,
                     currentBoss, monsterMaster, newMonster, addMonster, routineMaster, activeRoutineKey, gemMaster, showCollection, defeatedCollection,
                     timeZones, getTasksInZone, getZoneProgress, isZoneComplete, isZoneClaimed, claimZoneReward, moveTask,
-                    toggleRepeatDay, openRoutine, finishVercelRoutine, tryEnterAdmin, checkPassword, addTask, deleteTask, completeTask, quickAddBP, attackMonster,
+                    toggleRepeatDay, setEveryday, openRoutine, finishVercelRoutine, tryEnterAdmin, checkPassword, addTask, deleteTask, completeTask, quickAddBP, attackMonster,
                     importCode, copySyncCode, importMonsters,
                     clearAllData: () => { if(confirm("消去？")){ localStorage.clear(); location.reload(); } },
                     saveProfile: () => { profile.value = { ...tempProfile.value }; isEditingProfile.value = false; }
